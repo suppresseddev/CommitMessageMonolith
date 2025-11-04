@@ -2,13 +2,15 @@
 // Skeleton portion of the code.
 //
 
-#include<iostream>
-#include<string>
-#include<vector>
-#include<chrono>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <chrono>
 #include <iomanip>
-#include<sstream>
-#include<tuple>
+#include <sstream>
+#include <tuple>
+#include "trie.h"
 using namespace std;
 
 
@@ -93,7 +95,7 @@ void printEntry(std::string word, float freq) {
 
 int main() {
     //Before any of you (data structure designers) write any code here, put the name of your data structure next to a or b and stick to that.
-    //A -> (insert data structure name)
+    //A -> Trie
     //B -> (insert data structure name)
 
     //Startup
@@ -103,14 +105,42 @@ int main() {
     //Stay within the timer objects (start/end) for the purposes of comparing performance.
 
     auto start_a =  std::chrono::high_resolution_clock::now();
-    //For Data Structure Designer A
+    // For Data Structure Designer A
+    // Creating Trie
+    monolith_trie trie;
 
+	// Parsing Words
+	vector<string> files = {"data/CommitMessages_A.csv", "data/CommitMessages_B.csv", "data/CommitMessages_C.csv"};
+	for (const auto& file_name : files) {
+		ifstream file(file_name);
+		if (!file.is_open()) {
+			cerr << "Unable to open file" << endl;
+			return 1;
+		}
+
+		string line;
+		while (getline(file, line)) {
+			stringstream ss(line);
+			string word;
+			vector<string> words;
+
+			while (getline(ss, word, ',')) {
+				words.push_back(word);
+			}
+
+			for (string elem : words) {
+				trie.insert_sentence(elem);
+			}
+		}
+
+		file.close();
+	}
     //
     auto end_a = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float, std::milli> elapsed_a =  end_a - start_a;
 
     auto start_b = std::chrono::high_resolution_clock::now();
-    //For Data Structure Designer B
+    // For Data Structure Designer B
 
     //
     auto end_b = std::chrono::high_resolution_clock::now();
@@ -239,8 +269,12 @@ int main() {
 
             auto start =  std::chrono::high_resolution_clock::now();
             //For Data Structure Designer A
-            std::vector<std::string> words_a;
-            std::vector<float> freqs_a;
+            
+            tuple<vector<string>, vector<float>> result = trie.top_k(k);
+
+            std::vector<std::string> words_a = get<0>(result);
+            std::vector<float> freqs_a = get<1>(result);
+            
             //
             auto end =  std::chrono::high_resolution_clock::now();
 
@@ -316,8 +350,12 @@ int main() {
 
             auto start =  std::chrono::high_resolution_clock::now();
             //For Data Structure Designer A
-            std::vector<std::string> words_a;
-            std::vector<float> freqs_a;
+            
+            tuple<vector<string>, vector<float>> result = trie.bottom_k(k);
+
+            std::vector<std::string> words_a = get<0>(result);
+            std::vector<float> freqs_a = get<1>(result);
+            
             //
             auto end =  std::chrono::high_resolution_clock::now();
 
@@ -383,7 +421,7 @@ int main() {
 
             auto start =  std::chrono::high_resolution_clock::now();
             //For Data Structure Designer A
-            float freq_a;
+            float freq_a = trie.identify(search_target);
             //
             auto end =  std::chrono::high_resolution_clock::now();
 
