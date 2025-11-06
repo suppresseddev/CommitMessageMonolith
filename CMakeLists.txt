@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME}
     # other_source.cpp
     # other_header.hpp
 )
+file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 
 # optional: include directories if you have headers in subfolders
 # include_directories(include)
