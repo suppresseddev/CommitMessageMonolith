@@ -19,6 +19,7 @@ void clearConsole() {
     std::cout << "\033[2J\033[1;1H";
 }
 
+bool DEBUG_MODE = false;
 int CONSOLE_WIDTH = 98;
 int CONSOLE_INDENT = 10;
 std::string test_paragraph1 = "Have you been tested before? Nay you are yet to be tested. I can see it in your eyes. Look at you. "
@@ -70,8 +71,14 @@ void printNewLine() {
 }
 void printHeader() {
     printNewLine();
-    std::string gap1(46, ' ');
-    std::cout << gap1 << "The Commit Message Monolith" << std::endl;
+
+    if (DEBUG_MODE) {
+        std::string gap1(46-12, ' ');
+        std::cout << gap1 << "(DEBUG MODE) The Commit Message Monolith (DEBUG MODE)" << std::endl;
+    } else {
+        std::string gap1(46, ' ');
+        std::cout << gap1 << "The Commit Message Monolith" << std::endl;
+    }
     std::string gap2(50, ' ');
     std::cout << gap2 << "Seek our knowledge." << std::endl;
     printNewLine();
@@ -79,17 +86,32 @@ void printHeader() {
 }
 
 void printListing(std::vector<std::string> word_list, std::vector<float> freq_list) {
+    if (DEBUG_MODE) {
+        word_list.clear();
+        freq_list.clear();
+        word_list.push_back("Error Check");
+        word_list.push_back("Error Check Too");
+        word_list.push_back("Error Check Tri");
+        freq_list.push_back(0.0);
+        freq_list.push_back(0.50);
+        freq_list.push_back(1.0);
+    }
+
     for (int i = 0; i < word_list.size(); i++) {
         std::stringstream entry;
         entry << (i+1) << ". ";
-        entry << word_list[i] << " <Frequency: " << std::fixed << std::setprecision(2) << freq_list[i] << ">" << std::endl;
+        entry << "'" << word_list[i] << "' <Frequency: " << std::fixed << std::setprecision(2) << freq_list[i] << ">" << std::endl;
         print(entry.str());
     }
 }
 
 void printEntry(std::string word, float freq) {
+    if (DEBUG_MODE) {
+        word = "Error Check";
+        freq = 1.0;
+    }
     std::stringstream entry;
-    entry << word << " has a frequency of " << std::fixed << std::setprecision(2) << freq << "." << std::endl;
+    entry << "'" << word << "' has a frequency of " << std::fixed << std::setprecision(2) << freq << "." << std::endl;
     print(entry.str());
 }
 
@@ -115,7 +137,6 @@ int main() {
 		ifstream file(file_name);
 		if (!file.is_open()) {
 			cerr << "Unable to open file" << endl;
-			return 1;
 		}
 
 		string line;
@@ -167,7 +188,7 @@ int main() {
             print("4. Show me the construction details.");
             std::string user_input;
             get_input(user_input);
-            std::string valid[] = {"1", "2", "3", "4", "exit", "test"};
+            std::string valid[] = {"1", "2", "3", "4", "exit", "test", "debug"};
             bool valid_input = false;
             for (std::string option : valid) {
                 if (user_input == option) {
@@ -205,6 +226,9 @@ int main() {
                     }
                     if (option == "exit") {
                         running = false;
+                    }
+                    if (option == "debug") {
+                        DEBUG_MODE = !DEBUG_MODE;
                     }
                     if (option == "test") {
                         clearConsole();

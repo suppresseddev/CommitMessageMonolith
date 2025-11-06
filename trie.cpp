@@ -2,6 +2,7 @@
 #define TRIE_H
 
 #include <iostream>
+#include<algorithm>
 #include <string>
 #include <vector>
 #include <sstream>
