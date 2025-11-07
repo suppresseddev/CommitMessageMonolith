@@ -2,6 +2,7 @@
 #include <string>
 #include <tuple>
 #include <unordered_map>
+#include <memory>
 #pragma once
 
 using namespace std;

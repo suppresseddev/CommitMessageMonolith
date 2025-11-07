@@ -102,7 +102,7 @@ void printListing(std::vector<std::string> word_list, std::vector<float> freq_li
     for (int i = 0; i < word_list.size(); i++) {
         std::stringstream entry;
         entry << (i+1) << ". ";
-        entry << "'" << word_list[i] << "' <Frequency: " << std::fixed << std::setprecision(2) << freq_list[i] << ">" << std::endl;
+        entry << "'" << word_list[i] << "' <Frequency: " << std::fixed << std::setprecision(6) << freq_list[i] << ">" << std::endl;
         print(entry.str());
     }
 }
@@ -113,7 +113,7 @@ void printEntry(std::string word, float freq) {
         freq = 1.0;
     }
     std::stringstream entry;
-    entry << "'" << word << "' has a frequency of " << std::fixed << std::setprecision(2) << freq << "." << std::endl;
+    entry << "'" << word << "' has a frequency of " << std::fixed << std::setprecision(6) << freq << "." << std::endl;
     print(entry.str());
 }
 
