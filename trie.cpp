@@ -2,12 +2,15 @@
 #define TRIE_H
 
 #include <iostream>
-#include<algorithm>
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <sstream>
 #include <tuple>
 #include <cctype>
+#include <cmath>
+#include <unordered_map>
+#include <memory>
 #include "trie.h"
 #include <algorithm>
 using namespace std;
