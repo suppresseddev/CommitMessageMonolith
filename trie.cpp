@@ -9,6 +9,7 @@
 #include <tuple>
 #include <cctype>
 #include "trie.h"
+#include <algorithm>
 using namespace std;
 
 monolith_trie::monolith_trie() {

@@ -11,6 +11,8 @@
 #include <sstream>
 #include <tuple>
 #include "trie.h"
+#include "DS2.h"
+
 using namespace std;
 
 
@@ -118,7 +120,7 @@ void printEntry(std::string word, float freq) {
 int main() {
     //Before any of you (data structure designers) write any code here, put the name of your data structure next to a or b and stick to that.
     //A -> Trie
-    //B -> (insert data structure name)
+    //B -> Heap
 
     //Startup
 
@@ -162,10 +164,60 @@ int main() {
 
     auto start_b = std::chrono::high_resolution_clock::now();
     // For Data Structure Designer B
+    monolith_heap heap;
 
-    //
+    // Parsing Words into Heap
+    vector<string> files2 = {"data/CommitMessages_A.csv", "data/CommitMessages_B.csv", "data/CommitMessages_C.csv"};
+    for (const auto& file_name : files2) {
+        ifstream file(file_name);
+        if (!file.is_open()) {
+            cerr << "Unable to open file " << file_name << endl;
+            return 1;
+        }
+
+        string line;
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string field;
+
+            // Split CSV line by comma
+            while (getline(ss, field, ',')) {
+                // Convert to lowercase
+                for (char& c : field) c = tolower(c);
+
+                // Trim leading/trailing spaces
+                size_t start = field.find_first_not_of(" \t");
+                size_t end = field.find_last_not_of(" \t");
+                if (start == string::npos || end == string::npos) continue;
+                field = field.substr(start, end - start + 1);
+
+                // Split field into individual words
+                stringstream ws(field);
+                string word;
+                while (ws >> word) {
+                    // Remove punctuation from beginning/end of word
+                    size_t wstart = word.find_first_not_of(".,:;\"'()<>[]{}");
+                    size_t wend = word.find_last_not_of(".,:;\"'()<>[]{}");
+                    if (wstart == string::npos || wend == string::npos) continue;
+                    word = word.substr(wstart, wend - wstart + 1);
+
+                    if (!word.empty()) {
+                        heap.insertWord(word);  // insert individual word into heap
+                    }
+                }
+            }
+        }
+
+        file.close();
+    }
+
+    // After inserting all words, compute relative frequencies
+    heap.finalizeFrequencies();
+
     auto end_b = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<float, std::milli> elapsed_b =  end_b - start_b;
+    std::chrono::duration<float, std::milli> elapsed_b = end_b - start_b;
+
+
 
     //End of Startup
 
@@ -314,6 +366,7 @@ int main() {
             //For Data Structure Designer B
             std::vector<std::string> words_b;
             std::vector<float> freqs_b;
+            std::tie(words_b, freqs_b) = heap.top_k(k);
             //
             end = std::chrono::high_resolution_clock::now();
 
@@ -395,6 +448,7 @@ int main() {
             //For Data Structure Designer B
             std::vector<std::string> words_b;
             std::vector<float> freqs_b;
+            std::tie(words_b, freqs_b) = heap.bottom_k(k);
             //
             end = std::chrono::high_resolution_clock::now();
 
@@ -459,7 +513,8 @@ int main() {
 
             start = std::chrono::high_resolution_clock::now();
             //For Data Structure Designer B
-            float freq_b;
+            float freq_b = heap.identify(search_target);
+
             //
             end = std::chrono::high_resolution_clock::now();
 

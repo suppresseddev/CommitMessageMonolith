@@ -7,11 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # add the source files (list them explicitly or use a wildcard)
 add_executable(${PROJECT_NAME}
-    monolith.cpp
-    trie.h
-    trie.cpp
-    # other_source.cpp
-    # other_header.hpp
+        monolith.cpp
+        trie.h
+        trie.cpp
+        DS2.cpp
+        DS2.h
 )
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 
