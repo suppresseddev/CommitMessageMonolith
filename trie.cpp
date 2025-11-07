@@ -8,8 +8,8 @@
 #include <sstream>
 #include <tuple>
 #include <cctype>
+#include <memory>
 #include "trie.h"
-#include <algorithm>
 using namespace std;
 
 monolith_trie::monolith_trie() : root(make_unique<trie_node>()) {

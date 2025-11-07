@@ -10,8 +10,8 @@ add_executable(${PROJECT_NAME}
         monolith.cpp
         trie.h
         trie.cpp
-        DS2.cpp
         DS2.h
+        DS2.cpp
 )
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 
