@@ -105,5 +105,5 @@ float monolith_heap::identify(const std::string& word) {
     std::string lw = to_lower(word);
     auto it = freqMap.find(lw);
     if (it == freqMap.end()) return 0.0f;
-    return (it->second / totalWords) * 100.0f;
+    return (it->second / totalWords);
 }
