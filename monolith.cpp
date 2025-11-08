@@ -139,20 +139,41 @@ int main() {
 		ifstream file(file_name);
 		if (!file.is_open()) {
 			cerr << "Unable to open file" << endl;
+			return 1;
 		}
 
 		string line;
 		while (getline(file, line)) {
 			stringstream ss(line);
 			string word;
-			vector<string> words;
 
 			while (getline(ss, word, ',')) {
-				words.push_back(word);
-			}
 
-			for (string elem : words) {
-				trie.insert_sentence(elem);
+				for (char& ch : word) {
+					ch = tolower(ch);
+				}
+
+				size_t prefix = word.find_first_not_of(" \t");
+				size_t suffix = word.find_last_not_of(" \t");
+				if (prefix == string::npos || suffix == string::npos) {
+					continue;
+				}
+				word = word.substr(prefix, suffix - prefix + 1);
+
+				stringstream es(word);
+				string word2;
+				while (es >> word2) {
+					size_t eprefix = word2.find_first_not_of(".,:;\"'()<>[]{}");
+					size_t esuffix = word2.find_last_not_of(".,:;\"'()<>[]{}");
+					if (eprefix == string::npos || esuffix == string::npos) {
+						continue;
+					}
+					word2 = word2.substr(eprefix, esuffix - eprefix + 1);
+
+					if (!word2.empty() && word2 != " ") {
+						trie.insert(word2);
+					}
+				}
 			}
 		}
 
