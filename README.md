@@ -16,6 +16,6 @@ Alternatively, if you need to run the program in the console, after cloning the 
 
 `cmake ..`
 
-`cmake --build`
+`cmake --<build_location>`
 
 `./Monolith.exe`
